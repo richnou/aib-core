@@ -1,0 +1,27 @@
+/**
+ *
+ */
+package com.idyria.aib3.core.bus
+
+/**
+ * @author rleys
+ *
+ */
+trait AIBEventListener[T <: AIBEvent] {
+
+  /**
+   * Cleans out this listener
+   */
+  def stop
+
+  /**
+   * @return true if the listener is valid
+   */
+  def valid: Boolean
+
+  /**
+   * Dispatch an event to this listener
+   */
+  def dispatch(msg: AIBEvent)
+
+}
