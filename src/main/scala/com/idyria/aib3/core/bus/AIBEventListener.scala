@@ -7,7 +7,7 @@ package com.idyria.aib3.core.bus
  * @author rleys
  *
  */
-trait AIBEventListener[T <: AIBEvent] {
+trait AIBEventListener {
 
   /**
    * Cleans out this listener
@@ -22,6 +22,7 @@ trait AIBEventListener[T <: AIBEvent] {
   /**
    * Dispatch an event to this listener
    */
-  def dispatch(msg: AIBEvent)
+  def dispatch(msg: Any)
 
+  
 }

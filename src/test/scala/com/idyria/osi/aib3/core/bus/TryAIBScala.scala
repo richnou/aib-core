@@ -44,7 +44,7 @@ object TryAIBScala extends App {
     
   }
    
-  aib.registerClosure(cl)  
+  aib.registerClosure(cl)   
     
   // Type B
   

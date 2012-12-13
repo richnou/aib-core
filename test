@@ -1,0 +1,20 @@
+procedure "HelloWorld" {
+    
+    p =>
+    
+    p.
+    
+    p test "my Test"
+    p <= "MyTest" {
+        t =>
+    }
+
+} 
+
+
+//
+class Runner {
+
+    
+
+}

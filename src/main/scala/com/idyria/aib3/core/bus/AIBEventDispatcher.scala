@@ -30,8 +30,8 @@ trait AIBEventDispatcher {
   /**
    * Registers a closure to be activated upon receiving a specific event type
    */
-  def registerClosure[T <: AIBEvent](cl: T => Unit)
+  def registerClosure[ T <: AnyRef](cl: T => Unit)
   
-  def getListeners : scala.collection.mutable.Map[Class[_ <: AIBEvent], scala.collection.mutable.Set[AIBEventListener[_]]]
+  def getListeners : scala.collection.mutable.Map[Class[_], scala.collection.mutable.Set[AIBEventListener]]
   
 }
