@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib3.core.service
+package com.idyria.aib.core.service
 
 /**
  * This services manager is a service builder that records the top services and provides basic facilities for managing the created services

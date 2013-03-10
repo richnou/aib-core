@@ -1,8 +1,8 @@
 package com.idyria.osi.aib3.core.service
 
-import com.idyria.aib3.core.service.ServiceGroup
-import com.idyria.aib3.core.service.ServiceBuilder
-import com.idyria.aib3.core.service.ServicesManager
+import com.idyria.aib.core.service.ServiceGroup
+import com.idyria.aib.core.service.ServiceBuilder
+import com.idyria.aib.core.service.ServicesManager
 
 object TryAIBService extends App {
 

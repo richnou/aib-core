@@ -5,4 +5,4 @@
  * @author rleys
  *
  */
-package com.idyria.aib3.core.bus;
+package com.idyria.aib.core.bus;

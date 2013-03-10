@@ -1,14 +1,14 @@
 /**
  *
  */
-package com.idyria.aib3.core.bus
+package com.idyria.aib.core.bus
 
 import java.lang.reflect.Method
 import scala.Array.canBuildFrom
 import scala.actors.Actor
 import scala.actors.Reactor
 import scala.beans.BeanProperty
-import com.idyria.aib3.core.bus.AIBEvent
+import com.idyria.aib.core.bus.AIBEvent
 import scala.actors.scheduler.ExecutorScheduler
 
 /**

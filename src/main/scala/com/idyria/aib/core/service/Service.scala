@@ -1,10 +1,10 @@
 /**
  *
  */
-package com.idyria.aib3.core.service
+package com.idyria.aib.core.service
 
 import scala.beans.BeanProperty
-import com.idyria.aib3.core.bus.aib
+import com.idyria.aib.core.bus.aib
 
 /**
  * @author rleys

@@ -3,7 +3,7 @@
  */
 package com.idyria.osi.aib3.core.bus
 
-import com.idyria.aib3.core.bus.AIBEvent
+import com.idyria.aib.core.bus.AIBEvent
 
 /**
  * @author rleys

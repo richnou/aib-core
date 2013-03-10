@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.idyria.aib3.core.bus;
+package com.idyria.aib.core.bus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

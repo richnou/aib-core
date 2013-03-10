@@ -1,7 +1,7 @@
 package com.idyria.osi.aib3.core.bus
 
-import com.idyria.aib3.core.bus.AIBEvent
-import com.idyria.aib3.core.bus.aib
+import com.idyria.aib.core.bus.AIBEvent
+import com.idyria.aib.core.bus.aib
 
 object TryAIBScala extends App {
 

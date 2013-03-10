@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib3.core.service
+package com.idyria.aib.core.service
 
 /**
  * 

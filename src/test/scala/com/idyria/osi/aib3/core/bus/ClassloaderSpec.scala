@@ -8,7 +8,7 @@ import org.scalatest.FeatureSpec
 import java.net.URLClassLoader
 import java.net.URL
 import org.scalatest.GivenWhenThen
-import com.idyria.aib3.core.bus.aib
+import com.idyria.aib.core.bus.aib
 import java.util.concurrent.CyclicBarrier
 
 /**
