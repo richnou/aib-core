@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib.core.service
+package com.idyria.osi.aib.core.service
 
 /**
  * @author rleys
@@ -9,30 +9,30 @@ package com.idyria.aib.core.service
  */
 trait ServiceLifecycle {
 
-  
+
   /**
    * Init step
    */
   def aibInit = {}
-  
+
   /**
    * Start
    */
   def aibStart = {}
-  
+
   /**
    * Put object in standby
    */
   def aibSuspend = {}
-  
+
   /**
    * Resume after standby
    */
   def aibResume = {}
-  
+
   /**
-   * Completely finish 
+   * Completely finish
    */
   def aibStop = {}
-  
+
 }

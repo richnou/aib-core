@@ -11,6 +11,29 @@
         <version>2.10.1.r7</version>
     </parent>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <args>
+                        <arg>-feature</arg>
+                    </args>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <!-- Repositories to find OSI packages -->
     <!-- ############################################## -->
     <pluginRepositories>

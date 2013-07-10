@@ -1,12 +1,12 @@
 /**
  *
  */
-package com.idyria.aib.core.bus
+package com.idyria.osi.aib.core.bus
 
 import java.lang.reflect.Method
 import scala.Array.canBuildFrom
 import scala.beans.BeanProperty
-import com.idyria.aib.core.bus.AIBEvent
+
 
 import akka.actor.Actor
 import akka.actor.ActorRef
@@ -291,7 +291,7 @@ object aib extends AIBEventDispatcher {
   var busses = Map[ClassLoader, ActorRef]()
 
   /// Stop the local bus
-  def doStop = getBus doStop
+  def doStop = getBus.doStop
 
   /**
    * Default sends a message to local bus
@@ -320,7 +320,7 @@ object aib extends AIBEventDispatcher {
 
   /// @return All the listeners registered in local bus
   def getListeners :  scala.collection.Map[Class[_],  scala.collection.Set[AIBEventListener]] = {
-    getBus getListeners
+      getBus.getListeners
   }
 
   /**

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib.core.service
+package com.idyria.osi.aib.core.service
 
 import scala.collection.mutable.Stack
 
@@ -49,19 +49,19 @@ class ServiceBuilder {
    */
   class BuilderService(name : String) extends Service(name) {
 
-    var aibInitClosure: (Unit => Unit) = null 
+    var aibInitClosure: (Unit => Unit) = null
     var aibStartClosure: ( Unit => Unit) = null
     var aibSuspendClosure: (Unit => Unit) = null
     var aibResumeClosure: (Unit => Unit) = null
     var aibStopClosure: (Unit => Unit) = null
-    
-   
+
+
     override def aibInit = callClosure(aibInitClosure)
     override def aibStart = callClosure(aibStartClosure)
     override def aibSuspend = callClosure(aibSuspendClosure)
     override def aibResume = callClosure(aibResumeClosure)
     override def aibStop = callClosure(aibStopClosure)
-    
+
     def callClosure(cl: => Unit) = cl match { case x if (x != null) => x }
 
   }

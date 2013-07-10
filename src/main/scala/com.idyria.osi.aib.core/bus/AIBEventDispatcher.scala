@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib.core.bus
+package com.idyria.osi.aib.core.bus
 
 /**
  *

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib.core.bus
+package com.idyria.osi.aib.core.bus
 
 /**
  * @author rleys
@@ -24,5 +24,5 @@ trait AIBEventListener {
    */
   def dispatch(msg: Any)
 
-  
+
 }

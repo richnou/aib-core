@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.aib.core.dependencies
+package com.idyria.osi.aib.core.dependencies
 
 /**
  *

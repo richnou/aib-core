@@ -1,11 +1,12 @@
 /**
  *
  */
-package com.idyria.aib.core.dependencies.maven.model
+package com.idyria.osi.aib.core.dependencies.maven.model
 
 import com.idyria.osi.ooxoo.core.buffers.structural._
-import com.idyria.aib.core.dependencies.ArtifactTrait
 import com.idyria.osi.ooxoo.core.buffers.datatypes.XSDStringBuffer
+import com.idyria.osi.aib.core.dependencies.ArtifactTrait
+
 
 /**
  * @author rleys
