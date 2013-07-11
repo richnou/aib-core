@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.idyria.osi.aib3.core.bus
+package com.idyria.osi.aib.core.bus
 
 import org.scalatest.FunSuite
 import scala.collection.mutable.Stack
@@ -12,9 +12,9 @@ import scala.collection.mutable.Stack
  */
 class DispatchSpec extends FunSuite {
 
-  
+
   test("pop is invoked on a non-empty stack") {
- 
+
     val stack = new Stack[Int]
     stack.push(1)
     stack.push(2)
@@ -23,5 +23,5 @@ class DispatchSpec extends FunSuite {
     assert(result === 2)
     assert(stack.size === oldSize - 1)
   }
-  
+
 }

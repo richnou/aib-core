@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.idyria.osi.aib3.core.bus
+package com.idyria.osi.aib.core.bus
 
-import com.idyria.aib.core.bus.AIBEvent
+
 
 /**
  * @author rleys
@@ -11,9 +11,9 @@ import com.idyria.aib.core.bus.AIBEvent
  */
 trait AIBTestEvents {
 
-  
+
   class EventOne extends AIBEvent {
-    
+
   }
-  
+
 }

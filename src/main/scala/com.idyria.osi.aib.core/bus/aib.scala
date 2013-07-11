@@ -23,7 +23,7 @@ class aib (
 
     var name : String = null
 
-  ) extends Actor with AIBEventDispatcher {
+  )  extends AIBEventDispatcher {
 
   // Create Actor System
   //----------------------------------
@@ -126,7 +126,7 @@ class aib (
         println("-- Dispatching")
 
         // Clean valids
-        this.listeners(event.getClass) = this.listeners(event.getClass).filter(listener => listener.asInstanceOf[AIBEventListener].valid)
+        //this.listeners(event.getClass) = this.listeners(event.getClass).filter(listener => listener.asInstanceOf[AIBEventListener].valid)
 
         // Dispatch message
         this.listeners(event.getClass).foreach(listener => listener ! (event))
@@ -134,49 +134,7 @@ class aib (
 
   }
 
-  /**
-   * Act reacts on events
-   */
-  def receive = {
 
-
-    // Exit:
-    // - Stop remaining actors
-    // - Exit
-    case "exit" => {
-
-      println("Exiting")
-
-      // Clean
-      this.listeners.clear
-      //this.listeners.values.foreach { actors => actors.foreach { actor => actor.stop } }
-
-      // Exit
-      system.shutdown
-
-    }
-    case event: Any => {
-      println("Got AIBEvent: " + event.getClass)
-
-      // Send to all Actors, and clean at the same time
-      //--------
-      if (this.listeners.contains(event.getClass)) {
-
-        println("-- Dispatching")
-
-        // Clean valids
-        this.listeners(event.getClass) = this.listeners(event.getClass).filter(listener => listener.asInstanceOf[AIBEventListener].valid)
-
-        // Dispatch message
-        this.listeners(event.getClass).foreach(listener => listener ! (event))
-      }
-
-
-    }
-    //case x if(classOf[AIBEvent].isAssignableFrom(x.getClass)) => println("Got AIBEvent")
-
-
-  }
 
   def registerCatcher(listener: AnyRef,method: Method) = {
 
@@ -277,6 +235,11 @@ class aib (
 
 }
 
+/**
+
+  aib singleton used as entry point
+
+*/
 object aib extends AIBEventDispatcher {
 
   // Create actor System
@@ -288,7 +251,7 @@ object aib extends AIBEventDispatcher {
   /**
    * Real busses instances mapped to classloaders
    */
-  var busses = Map[ClassLoader, ActorRef]()
+  var busses = Map[ClassLoader, aib]()
 
   /// Stop the local bus
   def doStop = getBus.doStop
@@ -306,7 +269,7 @@ object aib extends AIBEventDispatcher {
 
     synchronized {
       this.busses.values.foreach {
-        bus => bus ! msg
+        bus => bus send msg
       }
     }
 
@@ -344,11 +307,11 @@ object aib extends AIBEventDispatcher {
 	      case false => {
 
           // Create AIB Bus actor
-          var aibActor =  system.actorOf(Props[aib])
+          var aibActor =  new aib
 
           // Record into busses map
 	    	  busses += (cl -> aibActor);
-	    	  busses(cl).asInstanceOf[aib]
+	    	  aibActor
 		  }
 	    }
     }

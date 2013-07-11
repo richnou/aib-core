@@ -1,11 +1,9 @@
 /**
  *
  */
-package com.idyria.osi.aib3.core.bus
+package com.idyria.osi.aib.core.bus
 
 import org.scalatest.FeatureSpec
-import com.idyria.aib.core.bus.AIBEvent
-import com.idyria.aib.core.bus.aib
 import org.scalatest.BeforeAndAfterAll
 
 /**
@@ -20,18 +18,18 @@ class ListenerSpec extends FeatureSpec with BeforeAndAfterAll {
   }
 
   def before {
-    
+
     //aib doStart
-    
+
   }
-  
+
   def after {
-    
+
     aib.doStop
-    aib clean
-    
+    aib.clean
+
   }
-  
+
   feature("Register Listener") {
 
     scenario("Listener is an Object") {
@@ -52,8 +50,8 @@ class ListenerSpec extends FeatureSpec with BeforeAndAfterAll {
 
       //-- Verify we have one listener detected
       assert(aib.getListeners.size===1)
-     
-      
+
+
     }
 
     scenario("Listener is a closure")(pending)
