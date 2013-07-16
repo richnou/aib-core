@@ -14,6 +14,7 @@ import akka.actor.ActorSystem
 import akka.actor.Props
 import akka.event.Logging
 
+import com.typesafe.config.ConfigFactory
 
 /**
  * @author rleys
@@ -34,7 +35,7 @@ class aib (
   }
 
   //-- Create System
-  val system = ActorSystem(name)
+  val system = ActorSystem(name,aib.customConf)
 
 
   /**
@@ -242,10 +243,17 @@ class aib (
 */
 object aib extends AIBEventDispatcher {
 
+  // Configuration for ActorSystems
+  val customConf = ConfigFactory.parseString("""
+    akka {
+      daemonic = true
+    }
+  """)
+
   // Create actor System
   //---------------------------
 
-  val system = ActorSystem("AIBSystem")
+  //val system = ActorSystem("AIBSystem")
 
 
   /**
