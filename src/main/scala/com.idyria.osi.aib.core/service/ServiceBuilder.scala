@@ -72,11 +72,7 @@ class ServiceBuilder {
     //------------
     var newService = new BuilderService(name)
 
-    //-- Add to top of stack
-    if (servicesStack.size > 0)
-      newService.setParent(servicesStack.head)
-    else
-      topServices += newService
+
     newService
   }
 
@@ -95,7 +91,16 @@ class ServiceBuilder {
 
   def service[T <: Service](service: T)(cl: (T) => Unit): T = {
 
-    // Call in Content
+    println("Adding Service Instance to ServiceBuilder")
+
+    //-- Add to top services oder parent service
+    //----------------------------
+    if (servicesStack.size > 0)
+      service.setParent(servicesStack.head)
+    else
+      topServices += service
+
+    // Add to stack head
     //-------------
     servicesStack.push(service)
     var res = cl(service)

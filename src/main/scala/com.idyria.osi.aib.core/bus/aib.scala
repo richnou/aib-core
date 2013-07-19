@@ -111,6 +111,7 @@ class aib (
   def doStop = {
 
     this send "exit"
+    this.system.shutdown
 
   }
 

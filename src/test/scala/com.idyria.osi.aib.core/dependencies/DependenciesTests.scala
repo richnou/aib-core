@@ -29,7 +29,7 @@ class DependenciesTests extends FeatureSpec with BeforeAndAfterAll {
       //-- Parse
       var project = new Project
       project.appendBuffer(xmlinputBuffer)
-      xmlinputBuffer.fetchIn
+      xmlinputBuffer.streamIn
 
 
 

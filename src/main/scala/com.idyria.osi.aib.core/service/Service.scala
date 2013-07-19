@@ -3,6 +3,7 @@
  */
 package com.idyria.osi.aib.core.service
 
+
 import scala.beans.BeanProperty
 import com.idyria.osi.aib.core.bus.aib
 
@@ -15,8 +16,8 @@ abstract class Service (
     /**
      * Name of this service
      */
-    @BeanProperty
-    protected var name: String ) extends ServiceLifecycle {
+     @BeanProperty
+    var name: String ) extends ServiceLifecycle {
 
 
   // Register in aib
@@ -25,17 +26,12 @@ abstract class Service (
   /**
    * Parent service of this service
    */
-  protected var parent: Service = null
+  var parent: Service = null
 
   /**
    * Children of this service
    */
-  protected var children = scala.collection.immutable.Set[Service]()
-
-
-
-
-
+  var children = scala.collection.immutable.Set[Service]()
 
 
   /**
