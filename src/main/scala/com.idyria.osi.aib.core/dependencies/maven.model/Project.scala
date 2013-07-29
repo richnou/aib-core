@@ -12,7 +12,7 @@ import com.idyria.osi.aib.core.dependencies.ArtifactTrait
  * @author rleys
  *
  */
-@xelement("project")
+@xelement(name="project")
 class Project extends ElementBuffer  {
 
   /*var artifactId: XSDStringBuffer
@@ -23,21 +23,23 @@ class Project extends ElementBuffer  {
   /**
    * <Dependencies>
    */
-  @xelement("dependencies")
+  @xelement(name="dependencies")
   var dependencies: XList[Dependencies] =  XList[Dependencies] { new Dependencies }
 
 }
 
+@xelement(name="dependencies")
 class Dependencies extends ElementBuffer {
 
   /**
    * <Dependency>
    */
-  @xelement("dependency")
+  @xelement(name="dependency")
   var dependency = XList[Dependency] { new Dependency }
 
 }
 
+@xelement(name="dependency")
 class Dependency extends ElementBuffer  with ArtifactTrait[XSDStringBuffer] {
 
   //
