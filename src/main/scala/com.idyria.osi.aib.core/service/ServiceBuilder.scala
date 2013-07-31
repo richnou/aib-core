@@ -5,6 +5,8 @@ package com.idyria.osi.aib.core.service
 
 import scala.collection.mutable.Stack
 
+import scala.language.implicitConversions
+
 /**
  *
  * The service Builder allows DSL construction of services hierarchy using this syntax:
@@ -85,13 +87,15 @@ class ServiceBuilder {
 
     // Call in Content
     //-------------
-    service(newService)(cl)
+    serviceWith(newService)(cl)
+
+    newService
 
   }
 
-  def service[T <: Service](service: T)(cl: (T) => Unit): T = {
+  def serviceWith[T <: Service](service: T)(cl : T=> Unit) : T =  {
 
-    println("Adding Service Instance to ServiceBuilder")
+    // println("Adding Service Instance to ServiceBuilder")
 
     //-- Add to top services oder parent service
     //----------------------------
@@ -109,5 +113,13 @@ class ServiceBuilder {
     service
 
   }
+
+  def service[T <: Service](service: T) : T = this.serviceWith(service){ s => }
+
+}
+
+object ServiceBuilder {
+
+
 
 }
