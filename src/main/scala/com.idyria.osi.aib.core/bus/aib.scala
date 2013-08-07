@@ -141,8 +141,9 @@ class aib (
   def registerCatcher(listener: AnyRef,method: Method) = {
 
     var eventType = method.getParameterTypes()(0)
+
     //println(s"Found event class type: ")
-    println(s"Registering event catcher for: $eventType")
+   // println(s"Registering event catcher for: $eventType")
 
     // Create Closure Type
     //---------
@@ -199,7 +200,7 @@ class aib (
    */
   def register(listener: AnyRef) = {
 
-    println("Registering Object" + listener.getClass())
+    //println("Registering Object" + listener.getClass())
 
     // Looking for method receiving an event
     //--------------

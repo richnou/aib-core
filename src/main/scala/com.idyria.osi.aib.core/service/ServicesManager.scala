@@ -21,13 +21,15 @@ class ServicesManager extends ServiceBuilder with ServiceLifecycle {
   override def aibInit = {
 
 
-
+    topServices.foreach(_.aibInit)
 
 
   }
 
 
   override def aibStart = {
+
+    topServices.foreach(_.aibStart)
 
   }
 
