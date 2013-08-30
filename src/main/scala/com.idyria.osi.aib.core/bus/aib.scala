@@ -122,8 +122,24 @@ class aib (
   def send (event: Any) = {
 
       // Send to all Actors, and clean at the same time
+      //  Actors that specificy an input type beeing a super type of the event are also elligible
       //--------
-      if (this.listeners.contains(event.getClass)) {
+      this.listeners.foreach { 
+ 
+         t =>
+
+            if (t._1.isAssignableFrom(event.getClass)) {
+
+                 println("-- Dispatching")
+                 t._2.foreach(listener => listener ! (event))
+                 //this.listeners(event.getClass).foreach(listener => listener ! (event))
+
+            }
+           
+
+       
+      }
+     /* if (this.listeners.contains(event.getClass)) {
 
         println("-- Dispatching")
 
@@ -132,7 +148,7 @@ class aib (
 
         // Dispatch message
         this.listeners(event.getClass).foreach(listener => listener ! (event))
-      }
+      }*/
 
   }
 
