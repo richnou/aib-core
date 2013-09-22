@@ -6,13 +6,13 @@ import scala.io._
 import scala.tools.nsc._
 import scala.tools.nsc.reporters._
 import scala.tools.nsc.interpreter._
-
+ 
 import scala.runtime._
-
+ 
 import java.net._
 
 import scala.collection.JavaConversions._
-
+ 
 class EmbeddedCompiler {
 
 
@@ -27,13 +27,16 @@ class EmbeddedCompiler {
     var bootclasspath = List[URL]()
 
     //--- Scala Compiler and library
-    val compilerPath = java.lang.Class.forName("scala.tools.nsc.Interpreter").getProtectionDomain.getCodeSource.getLocation
-    val libPath = java.lang.Class.forName("scala.Some").getProtectionDomain.getCodeSource.getLocation
-    
-    //-- Mex
-    val mexPath = java.lang.Class.forName("com.idyria.osi.ooxoo.model.ModelCompiler").getProtectionDomain.getCodeSource.getLocation
+    try {
+	    val compilerPath = java.lang.Class.forName("scala.tools.nsc.Interpreter").getProtectionDomain.getCodeSource.getLocation
+	    bootclasspath = compilerPath ::  bootclasspath 
+	    val libPath = java.lang.Class.forName("scala.Some").getProtectionDomain.getCodeSource.getLocation
+	    bootclasspath = libPath  :: bootclasspath 
+    } catch {
+      case e : Throwable => 
+    }
 
-    bootclasspath = compilerPath :: libPath :: mexPath :: bootclasspath 
+    
 
     //-- If Classloader is an URL classLoader, add all its urls to the compiler
     //println("Classloader type: "+getClass().getClassLoader())
@@ -62,22 +65,41 @@ class EmbeddedCompiler {
 
     // Create Compiler
     //---------------------
-    //val imain = new IMain(settings2)
+    val imain = new IMain(settings2)
 
     // Compilation result
+    
+    // Default compiler
+    //---------------
+    
+  
+    // Reporter
+    var reporter = new ConsoleReporter(settings2)
+
+    // Global
+    val defaultCompiler = new Global(settings2,reporter)
+        
+       
+    val defaultCompilerRun = new defaultCompiler.Run()
 
     /**
         Binds a named variable to a value for the model compiler
     */
     def bind(name:String,value: Any) = {
 
-       // imain.bindValue(name,value)
-        
+        imain.bindValue(name,value)
+        //defaultCompilerRun.
 
     }
 
+    def interpret(content:String) = {
+      
+      imain.interpret(content)
+    
+    }
+  
     /**
-        @return The Model name
+        @return 
     */
     def compile(file: File) = {
 
