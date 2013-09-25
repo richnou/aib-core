@@ -53,8 +53,9 @@ class EmbeddedCompiler {
     // Prepare Compiler Settings Settings
     //----------------
     var settings2 = new GenericRunnerSettings({
-        error => println(error)
+        error => println("******* Error Happened ***********")
     })
+
     settings2.usejavacp.value = true
     settings2.bootclasspath.value = bootclasspath  mkString java.io.File.pathSeparator
 
@@ -65,13 +66,14 @@ class EmbeddedCompiler {
 
     // Create Compiler
     //---------------------
-    val imain = new IMain(settings2)
+    var interpreterOutput = new StringWriter
+    val imain = new IMain(settings2, new PrintWriter(interpreterOutput))
 
     // Compilation result
     
     // Default compiler
     //---------------
-    
+   
   
     // Reporter
     var reporter = new ConsoleReporter(settings2)
@@ -91,10 +93,16 @@ class EmbeddedCompiler {
         //defaultCompilerRun.
 
     }
-
+    
+    /**
+     * Will throw an exception with message in case of error
+     */
     def interpret(content:String) = {
       
-      imain.interpret(content)
+      imain.interpret(content) match {
+        case IR.Error => throw new RuntimeException(s"Could not interpret content: ${interpreterOutput.toString()}")
+        case _ =>
+      }
     
     }
   
