@@ -118,20 +118,32 @@ class aib (
 
   /**
    * Event send (syntax is like Actors)
+   * If the event is Some, then extract the value, this is just a Help to simplify usage
    */
   def send (event: Any) = {
 
+	  println(s"Send received on $name for event: ${event.getClass.getSimpleName()}")
+    
+	  // If any is Some, extract the value
+	  //-------------
+	  var realEvent = event match {
+	    case Some(real) => real
+	    case _ => event
+	  }
+	  
       // Send to all Actors, and clean at the same time
       //  Actors that specificy an input type beeing a super type of the event are also elligible
       //--------
       this.listeners.foreach { 
  
-         t =>
+	    case (eventClass,actors) =>
 
-            if (t._1.isAssignableFrom(event.getClass)) {
+	       println(s"Actors defined for: ${eventClass.getSimpleName()}")
+	      
+            if (eventClass.isAssignableFrom(realEvent.getClass)) {
 
                  println("-- Dispatching")
-                 t._2.foreach(listener => listener ! (event))
+                 actors.foreach(listener => listener ! (realEvent))
                  //this.listeners(event.getClass).foreach(listener => listener ! (event))
 
             }
@@ -139,16 +151,6 @@ class aib (
 
        
       }
-     /* if (this.listeners.contains(event.getClass)) {
-
-        println("-- Dispatching")
-
-        // Clean valids
-        //this.listeners(event.getClass) = this.listeners(event.getClass).filter(listener => listener.asInstanceOf[AIBEventListener].valid)
-
-        // Dispatch message
-        this.listeners(event.getClass).foreach(listener => listener ! (event))
-      }*/
 
   }
 
@@ -193,7 +195,7 @@ class aib (
     }.head
 
     var eventType = (closureMethod.getParameterTypes()(0).asInstanceOf[Class[AIBEvent]])
-    println("Registering Closure event type: " + eventType)
+    println(s"Registering Closure event type on $name: " + eventType)
     println("Registering Closure event type: " + (closureMethod.getParameterTypes()(0)))
 
     //var clref : (AnyRef => Unit)

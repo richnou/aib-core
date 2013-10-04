@@ -20,8 +20,12 @@ class ServicesManager extends ServiceBuilder with ServiceLifecycle {
    */
   override def aibInit = {
 
-
-    topServices.foreach(_.aibInit)
+    
+    topServices.foreach {
+      s => 
+        println(s"[Service] init on ${s.name}")
+        s.aibInit
+    }
 
 
   }
@@ -29,22 +33,44 @@ class ServicesManager extends ServiceBuilder with ServiceLifecycle {
 
   override def aibStart = {
 
-    topServices.foreach(_.aibStart)
+    topServices.foreach {
+      s => 
+        println(s"[Service] start on ${s.name}")
+        s.aibStart
+    }
 
   }
 
 
   override def aibSuspend = {
 
+    topServices.foreach {
+      s => 
+        println(s"[Service] suspend on ${s.name}")
+        s.aibSuspend
+    }
+    
   }
 
   override def aibResume = {
 
+    topServices.foreach {
+      s => 
+        println(s"[Service] resume on ${s.name}")
+        s.aibResume
+    }
+    
   }
 
 
   override def aibStop = {
 
+    topServices.foreach {
+      s => 
+        println(s"[Service] stop on ${s.name}")
+        s.aibStop
+    }
+    
   }
 
 

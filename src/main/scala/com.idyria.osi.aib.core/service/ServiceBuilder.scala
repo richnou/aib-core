@@ -49,22 +49,25 @@ class ServiceBuilder {
   /**
    * A Helper class whose lifecycle method can be defined externally using closures setters
    */
-  class BuilderService(name : String) extends Service(name) {
+  class BuilderService(name: String) extends Service(name) {
 
-    var aibInitClosure: (Unit => Unit) = null
-    var aibStartClosure: ( Unit => Unit) = null
-    var aibSuspendClosure: (Unit => Unit) = null
-    var aibResumeClosure: (Unit => Unit) = null
-    var aibStopClosure: (Unit => Unit) = null
+    var aibInitClosure: (() => Unit) = { () => }
+    var aibStartClosure: (() => Unit) = { () => }
+    var aibSuspendClosure: (() => Unit) = { () => }
+    var aibResumeClosure: (() => Unit) = { () => }
+    var aibStopClosure: (() => Unit) = { () => }
 
+    def onInit(cl: => Unit) = this.aibInitClosure = { () => cl }
+    def onStart(cl: => Unit) = this.aibStartClosure = { () =>  cl }
+    def onSuspend(cl: => Unit) = this.aibSuspendClosure = { () => cl }
+    def onResume(cl: => Unit) = this.aibResumeClosure = { () => cl }
+    def onStop(cl: => Unit) = this.aibStopClosure = { () => cl }
 
-    override def aibInit = callClosure(aibInitClosure)
-    override def aibStart = callClosure(aibStartClosure)
-    override def aibSuspend = callClosure(aibSuspendClosure)
-    override def aibResume = callClosure(aibResumeClosure)
-    override def aibStop = callClosure(aibStopClosure)
-
-    def callClosure(cl: => Unit) = cl match { case x if (x != null) => x }
+    override def aibInit = aibInitClosure()
+    override def aibStart = aibStartClosure()
+    override def aibSuspend = aibSuspendClosure()
+    override def aibResume = aibResumeClosure()
+    override def aibStop = aibStopClosure()
 
   }
 
@@ -73,7 +76,6 @@ class ServiceBuilder {
     // Create Service
     //------------
     var newService = new BuilderService(name)
-
 
     newService
   }
@@ -93,7 +95,7 @@ class ServiceBuilder {
 
   }
 
-  def serviceWith[T <: Service](service: T)(cl : T=> Unit) : T =  {
+  def serviceWith[T <: Service](service: T)(cl: T => Unit): T = {
 
     // println("Adding Service Instance to ServiceBuilder")
 
@@ -114,12 +116,10 @@ class ServiceBuilder {
 
   }
 
-  def service[T <: Service](service: T) : T = this.serviceWith(service){ s => }
+  def service[T <: Service](service: T): T = this.serviceWith(service) { s => }
 
 }
 
 object ServiceBuilder {
-
-
 
 }
