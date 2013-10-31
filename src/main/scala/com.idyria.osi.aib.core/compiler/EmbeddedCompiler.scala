@@ -55,7 +55,12 @@ class EmbeddedCompiler {
   settings2.usejavacp.value = true
   settings2.bootclasspath.value = bootclasspath mkString java.io.File.pathSeparator
 
-  settings2.outputDirs.setSingleOutput("target/classes")
+  if (new File("target/classes").exists()) {
+    settings2.outputDirs.setSingleOutput("target/classes")
+  } else {
+    
+  }
+  
   //-- Show some infos
   //println("compilerPath=" + compilerPath);
   //println("settings.bootclasspath.value=" + settings2.bootclasspath.value);
