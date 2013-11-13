@@ -1,17 +1,14 @@
 package com.idyria.osi.aib.core.compiler
 
 import java.io._
-
 import scala.io._
 import scala.tools.nsc._
 import scala.tools.nsc.reporters._
 import scala.tools.nsc.interpreter._
-
 import scala.runtime._
-
 import java.net._
-
 import scala.collection.JavaConversions._
+import java.util.concurrent.Semaphore
 
 class EmbeddedCompiler {
 
@@ -83,6 +80,32 @@ class EmbeddedCompiler {
 
   val defaultCompilerRun = new defaultCompiler.Run()
 
+  
+  // Ready Logic
+  //--------------------
+  var readySemaphore = new Semaphore(0)
+  
+  /**
+   * Just execute a dummy line on compiler to init it, and release a grant in ready semaphore
+   */
+  def init = {
+    
+    interpret("var init = true")
+    readySemaphore.release()
+    
+  }
+  
+  /**
+   * Wait for ready signal
+   * init must have been called by user somewhere for this method to return, otherwise it keeps blocking
+   */
+  def waitReady = {
+    
+    readySemaphore.acquire
+    readySemaphore.release
+  }
+  
+  
   /**
    * Binds a named variable to a value for the model compiler
    */
