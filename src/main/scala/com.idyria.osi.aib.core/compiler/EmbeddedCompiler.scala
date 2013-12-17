@@ -48,8 +48,9 @@ class EmbeddedCompiler {
   var settings2 = new GenericRunnerSettings({
     error => println("******* Error Happened ***********")
   })
-
-  settings2.usejavacp.value = true
+  settings2.nc.value = true
+  //settings2.usejavacp.value = true
+  settings2.classpath.value = bootclasspath mkString java.io.File.pathSeparator
   settings2.bootclasspath.value = bootclasspath mkString java.io.File.pathSeparator
 
   if (new File("target/classes").exists()) {
@@ -73,12 +74,12 @@ class EmbeddedCompiler {
   //---------------
 
   // Reporter
-  var reporter = new ConsoleReporter(settings2)
+ // var reporter = new ConsoleReporter(settings2)
 
   // Global
-  val defaultCompiler = new Global(settings2, reporter)
+ // val defaultCompiler = new Global(settings2, reporter)
 
-  val defaultCompilerRun = new defaultCompiler.Run()
+ // val defaultCompilerRun = new defaultCompiler.Run()
 
   
   // Ready Logic
@@ -90,7 +91,7 @@ class EmbeddedCompiler {
    */
   def init = {
     
-    interpret("var init = true")
+    interpret("var init = true;")
     readySemaphore.release()
     
   }
@@ -161,7 +162,7 @@ class EmbeddedCompiler {
   /**
    * @return
    */
-  def compile(file: File) = {
+  /*def compile(file: File) = {
 
     // Reporter
     var reporter = new ConsoleReporter(settings2)
@@ -201,6 +202,6 @@ class EmbeddedCompiler {
         }
 */
 
-  }
+  }*/
 
 }

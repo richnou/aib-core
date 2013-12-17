@@ -24,6 +24,10 @@ class CompiledSource[T]( var source : URL,var result : T) {
 	  source.getProtocol() match {
 	    case "file" => 
 	    	
+	      var actualLastModified = new File(source.getFile()).lastModified()
+	      
+	      //println(s"Testing source file: "+source.getFile()+ s", last modified: $actualLastModified, last compiled: $lastModified")
+	      
 	      new File(source.getFile()).lastModified() match {
 	        case lm if (lm > lastModified) =>
 	          
@@ -56,7 +60,6 @@ trait SourceCompiler[T] {
   //-------------
   var compiler = new EmbeddedCompiler
 
- 
 
   // Configured Imports
   //---------------
@@ -74,6 +77,7 @@ trait SourceCompiler[T] {
    */
   def compile(source: URL) = {
    
+    
     // Look in map
     //---------------------
     this.cache.get(source.toExternalForm()) match {
@@ -81,6 +85,7 @@ trait SourceCompiler[T] {
       //-- Still valid, return result
       case Some(compiled) if (compiled.isValid) => 
         
+        //println(s"Already compil")
         compiled.result
         
       //-- None or invalid, recompile and save
