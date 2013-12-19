@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.idyria.osi.aib</groupId>
 	<artifactId>aib-core</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<name>AIB Application manager</name>
 	<parent>
         <groupId>com.idyria.osi</groupId>
@@ -16,7 +16,7 @@
         <connection>scm:git:git://bitbucket.org/osi/${project.artifactId}.git</connection>
         <developerConnection>scm:git:git@bitbucket.org:osi/${project.artifactId}.git</developerConnection>
         <url>http://bitbucket.org/osi/${project.artifactId}.git</url>
-      <tag>aib-core-3.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <build>
