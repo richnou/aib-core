@@ -53,11 +53,11 @@ object Project {
     var file = new File("pom.xml")
 
     // Resolve
-    (url, file) match {
-      case (null, null) => None
+    (url, file.exists()) match {
+      case (null, false) => None
 
       // Use URL
-      case (url, null)  =>
+      case (url, false)  =>
       	
         var project = new Project()
         project.appendBuffer(new StAXIOBuffer(url.openStream()))
@@ -66,7 +66,7 @@ object Project {
         Some(project)
         
       // Use File
-      case (url, file)  =>
+      case (_, true)  =>
         
         var project = new Project()
         project.appendBuffer(new StAXIOBuffer(new FileInputStream(file)))
