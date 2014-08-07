@@ -112,7 +112,7 @@ class EmbeddedCompiler {
    */
   def bind(name: String, value: Any) = {
 
-    imain.bindValue(name, value)
+    imain.bind(name, value)
     //defaultCompilerRun.
 
   }
