@@ -20,7 +20,7 @@ import com.idyria.osi.tea.logging.TLogSource
  */
 class aib(
 
-    var name: String = null) extends AIBEventDispatcher with TLogSource {
+  var name: String = null) extends AIBEventDispatcher with TLogSource {
 
   // Create Actor System
   //----------------------------------
@@ -117,7 +117,7 @@ class aib(
     //-------------
     var realEvent = event match {
       case Some(real) => real
-      case _          => event
+      case _ => event
     }
 
     // Send to all Actors, and clean at the same time
@@ -339,6 +339,29 @@ object aib extends AIBEventDispatcher {
           aibActor
         }
       }
+    }
+
+  }
+
+  // Bus transfer from one classloader to another
+  //-----------------------
+  def transferBus(from: ClassLoader, to: ClassLoader) = {
+
+    //-- Get Bus 
+    synchronized {
+
+       busses.get(from) match {
+
+        //-- Transfer
+        case Some(bus) =>
+            busses += (to -> bus);
+            busses -= (from);
+          
+        //-- Fail
+        case None => 
+          println(s"*aib: Requesting bus transfer from a classloader not containing any busses")
+      }
+
     }
 
   }

@@ -1,16 +1,16 @@
 package com.idyria.osi.aib.core.compiler
 
 import java.io._
-import scala.io._
-import scala.tools.nsc._
-import scala.tools.nsc.reporters._
-import scala.tools.nsc.interpreter._
-import scala.runtime._
 import java.net._
-import scala.collection.JavaConversions._
 import java.util.concurrent.Semaphore
+import scala.collection.JavaConversions._
+import scala.tools.nsc._
+import scala.tools.nsc.interpreter._
+import scala.reflect.internal.util.SourceFile
+import scala.reflect.internal.util.BatchSourceFile
+import scala.reflect.io.AbstractFile
 
-class EmbeddedCompiler {
+class EmbeddedCompiler (  var parentLoader : ClassLoader = null) {
 
   // Run Statistics
   //---------------------
@@ -34,14 +34,18 @@ class EmbeddedCompiler {
 
   //-- If Classloader is an URL classLoader, add all its urls to the compiler
   //println("Classloader type: "+getClass().getClassLoader())
-  if (getClass.getClassLoader.isInstanceOf[URLClassLoader]) {
-
-    //println("Adding URLs from class loader to boot class path")
-
-    //-- Gather URLS
-    getClass.getClassLoader.asInstanceOf[URLClassLoader].getURLs().foreach(url => bootclasspath = url :: bootclasspath)
-
+  //,Thread.currentThread().getContextClassLoader
+  List(getClass.getClassLoader,Thread.currentThread().getContextClassLoader).foreach {
+    case cl : URLClassLoader => 
+      //-- Gather URLS
+      cl.getURLs().foreach {
+        url => 
+         // println(s"**ECompiler adding: ${url.toExternalForm()}")
+          bootclasspath = url :: bootclasspath
+        }
+    case _ => 
   }
+
 
   // Prepare Compiler Settings Settings
   //----------------
@@ -52,7 +56,7 @@ class EmbeddedCompiler {
   //settings2.usejavacp.value = true
   settings2.classpath.value = bootclasspath mkString java.io.File.pathSeparator
   settings2.bootclasspath.value = bootclasspath mkString java.io.File.pathSeparator
-
+  
   if (new File("target/classes").exists()) {
     settings2.outputDirs.setSingleOutput("target/classes")
   } else {
@@ -65,8 +69,35 @@ class EmbeddedCompiler {
 
   // Create Compiler
   //---------------------
+  
+
+  
   var interpreterOutput = new StringWriter
-  val imain = new IMain(settings2, new PrintWriter(interpreterOutput))
+  val imain = new IMain(settings2, new PrintWriter(interpreterOutput)) {
+    
+    override protected def parentClassLoader: ClassLoader = {
+      
+      /*parentLoader match {
+        case null => super.parentClassLoader
+        case _ => parentLoader
+      }*/
+      Thread.currentThread().getContextClassLoader
+   
+    }
+    
+    def compileSourcesSeq(sources: Seq[SourceFile]): Boolean =
+      compileSourcesKeepingRun(sources: _*)._1
+  }
+  
+  /*{
+    
+
+    override private def makeClassLoader(): util.AbstractFileClassLoader =
+      
+      super.makeClassLoader()
+   
+    
+  }*/
 
   // Compilation result
 
@@ -158,6 +189,58 @@ class EmbeddedCompiler {
     }
 
   }
+  
+  /**
+   * Compile Some files
+   */
+  def compileFiles(f:Seq[File]) : Option[FileCompileError] = {
+    
+    try {
+
+      imain.compileSourcesSeq(f.map{f => new BatchSourceFile(AbstractFile.getFile(f.getAbsoluteFile))}) match {
+        case false => 
+          
+          // Prepare error
+          Some(new FileCompileError(null,interpreterOutput.toString().trim))
+          
+          //throw new RuntimeException(s"Could not compile content: ${interpreterOutput.toString()}")
+        case _     => None
+      }
+
+    } finally {
+
+      // Reset output
+      interpreterOutput.getBuffer().setLength(0)
+
+    }
+    
+  }
+  
+  /**
+   * Compile a file
+   */
+  def compileFile(f:File) : Option[FileCompileError] = {
+    
+    try {
+
+      imain.compileSources(new BatchSourceFile(AbstractFile.getFile(f.getAbsoluteFile))) match {
+        case false => 
+          
+          // Prepare error
+          Some(new FileCompileError(f,interpreterOutput.toString()))
+          
+          //throw new RuntimeException(s"Could not compile content: ${interpreterOutput.toString()}")
+        case _     => None
+      }
+
+    } finally {
+
+      // Reset output
+      interpreterOutput.getBuffer().setLength(0)
+
+    }
+    
+  }
 
   /**
    * @return
@@ -204,4 +287,16 @@ class EmbeddedCompiler {
 
   }*/
 
+}
+
+class CompileError {
+  
+}
+
+class FileCompileError(var file : File,var message:String) extends CompileError {
+  
+}
+
+object CompileError {
+  
 }
