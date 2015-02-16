@@ -40,5 +40,13 @@ class EmbeddedCompilerTest extends FunSuite with GivenWhenThen with TimingSuppor
     //compiler.compile(new File("src/test/resources/test_compile.scala"))
 
   }
+  
+   test("CPTest") {
+
+    var compiler = new EmbeddedCompiler
+    
+    compiler.interpret("new com.idyria.osi.aib.core.bus.AIBEvent")
+
+  }
 
 }

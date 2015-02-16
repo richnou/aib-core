@@ -53,7 +53,7 @@ class EmbeddedCompiler (  var parentLoader : ClassLoader = null) {
     error => println("******* Error Happened ***********")
   })
   settings2.nc.value = true
-  //settings2.usejavacp.value = true
+  settings2.usejavacp.value = true
   settings2.classpath.value = bootclasspath mkString java.io.File.pathSeparator
   settings2.bootclasspath.value = bootclasspath mkString java.io.File.pathSeparator
   
