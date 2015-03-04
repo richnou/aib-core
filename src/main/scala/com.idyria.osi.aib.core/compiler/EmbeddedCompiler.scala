@@ -53,9 +53,9 @@ class EmbeddedCompiler (  var parentLoader : ClassLoader = null) {
     error => println("******* Error Happened ***********")
   })
   settings2.nc.value = true
-  //settings2.usejavacp.value = true
-  settings2.classpath.value = bootclasspath mkString java.io.File.pathSeparator
-  settings2.bootclasspath.value = bootclasspath mkString java.io.File.pathSeparator
+  settings2.usejavacp.value = true
+  settings2.classpath.value = bootclasspath.map(u => u.getPath.replaceFirst("/", "")) mkString java.io.File.pathSeparator
+  settings2.bootclasspath.value = bootclasspath.map(u => u.getPath.replaceFirst("/", "")) mkString java.io.File.pathSeparator
   
   if (new File("target/classes").exists()) {
     settings2.outputDirs.setSingleOutput("target/classes")

@@ -111,7 +111,7 @@ class aib(
    */
   def send(event: Any) = {
 
-    logFine(s"Send received on $name for event: ${event.getClass.getSimpleName()}")
+    logFine(s"Send received on $name for event: ${event.getClass.getCanonicalName()}")
 
     // If any is Some, extract the value
     //-------------
@@ -127,7 +127,7 @@ class aib(
 
       case (eventClass, actors) =>
 
-        logFine(s"Actors defined for: ${eventClass.getSimpleName()}")
+        logFine(s"Actors defined for: ${eventClass.getCanonicalName()}")
 
         if (eventClass.isAssignableFrom(realEvent.getClass)) {
 
@@ -294,7 +294,10 @@ object aib extends AIBEventDispatcher {
 
     synchronized {
       this.busses.values.foreach {
-        bus => bus send msg
+        bus => 
+          
+          println(s"Sending msg to $bus")
+          bus send msg
       }
     }
 
