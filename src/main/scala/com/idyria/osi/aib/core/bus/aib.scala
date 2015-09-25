@@ -141,6 +141,7 @@ class aib(
 
               var listenerActor = system.actorOf(Props(new ListenerActor(listener)))
               listenerActor ! (realEvent)
+              
 
           }
           //this.listeners(event.getClass).foreach(listener => listener ! (event))
@@ -346,10 +347,12 @@ object aib extends AIBEventDispatcher {
 
   }
 
-  // Bus transfer from one classloader to another
+  // Bus transfer from one classloader to the actual
   //-----------------------
-  def transferBus(from: ClassLoader, to: ClassLoader) = {
-
+  def transferBus(from: ClassLoader) : aib = {
+  
+    var to = Thread.currentThread().getContextClassLoader()
+    
     //-- Get Bus 
     synchronized {
 
@@ -359,10 +362,13 @@ object aib extends AIBEventDispatcher {
         case Some(bus) =>
             busses += (to -> bus);
             busses -= (from);
-          
-        //-- Fail
+            
+            bus
+            
+        //-- Fail: Return a new bus 
         case None => 
           println(s"*aib: Requesting bus transfer from a classloader not containing any busses")
+          getBus
       }
 
     }

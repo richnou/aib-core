@@ -74,7 +74,7 @@ class EmbeddedCompiler (  var parentLoader : ClassLoader = null) {
   if (new File("target/classes").exists()) {
     settings2.outputDirs.setSingleOutput("target/classes")
   } else {
-    
+    settings2.outputDirs.setSingleOutput("eout")
   }
   
   //-- Show some infos
