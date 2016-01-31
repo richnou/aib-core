@@ -75,6 +75,7 @@ class EmbeddedCompiler (  var parentLoader : ClassLoader = null) {
     settings2.outputDirs.setSingleOutput("target/classes")
   } else {
     settings2.outputDirs.setSingleOutput("eout")
+    new File("eout").mkdirs()
   }
   
   //-- Show some infos

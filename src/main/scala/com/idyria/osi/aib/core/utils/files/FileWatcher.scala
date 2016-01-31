@@ -19,6 +19,7 @@ class FileWatcher extends ThreadLanguage with TLogSource {
 
   var baseDirectories = Map[WatchKey, File]()
   var changeListeners = Map[String, List[() => Any]]()
+  var directoryChangeListeners = Map[String, List[File => Any]]()
 
   def start = {
     println(s"////////////// Startin watcher")
@@ -27,6 +28,32 @@ class FileWatcher extends ThreadLanguage with TLogSource {
 
   def stop = {
 
+  }
+
+  def onDirectoryChange(f: File)(cl: File => Any) = {
+    f match {
+      case f if (!f.isDirectory()) => new RuntimeException("Cannot Watch Directory Change on File")
+      case d =>
+
+        // to path
+        var directoryPath = FileSystems.getDefault().getPath(d.getAbsolutePath)
+
+        // Register if necessary
+        this.baseDirectories.find { case (key, file) => file.getAbsolutePath == d.getAbsolutePath } match {
+          case Some(entry) =>
+          case None =>
+            var watchKey = directoryPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE)
+            this.baseDirectories = this.baseDirectories + (watchKey -> d.getAbsoluteFile)
+        }
+
+        // Save listener
+        var listeners = directoryChangeListeners.get(f.getAbsolutePath) match {
+          case Some(listeners) => listeners
+          case None => List()
+        }
+        listeners = listeners :+ cl
+        this.directoryChangeListeners = this.directoryChangeListeners.updated(f.getAbsolutePath, listeners)
+    }
   }
 
   def onFileChange(f: File)(cl: => Any) = {
@@ -44,7 +71,7 @@ class FileWatcher extends ThreadLanguage with TLogSource {
           case Some(entry) =>
           case None =>
             var watchKey = directoryPath.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY)
-            this.baseDirectories = this.baseDirectories + (watchKey ->  f.getParentFile.getAbsoluteFile)
+            this.baseDirectories = this.baseDirectories + (watchKey -> f.getParentFile.getAbsoluteFile)
         }
 
         // Save listener
@@ -55,7 +82,7 @@ class FileWatcher extends ThreadLanguage with TLogSource {
         listeners = listeners :+ { () => cl }
         this.changeListeners = this.changeListeners.updated(f.getAbsolutePath, listeners)
 
-        println(s"///////////// Recorded event for "+f.getAbsolutePath)
+        println(s"///////////// Recorded event for " + f.getAbsolutePath)
       // 
     }
 
@@ -76,37 +103,71 @@ class FileWatcher extends ThreadLanguage with TLogSource {
         /* key.pollEvents().foreach {
           e => e.
         }*/
-        
+
         //println(s"///////////// Got Key ")
         key.pollEvents().filter { ev => ev.kind() != StandardWatchEventKinds.OVERFLOW } foreach {
 
+          // Directory Add
+          //----------------------
+          case be: WatchEvent[_] if (be.kind() == StandardWatchEventKinds.ENTRY_CREATE) =>
+            var e = be.asInstanceOf[WatchEvent[Path]]
+            
+            // Get Path of directory
+            var directoryFile = this.baseDirectories.get(key).get
+
+            // Get Path of file
+            var fileAbsoluteFile = directoryFile.toPath().resolve(e.context()).toAbsolutePath().toFile()
+            var filePath = fileAbsoluteFile.getAbsolutePath
+            
+            // Get and run listeners
+            directoryChangeListeners.get(directoryFile.getAbsolutePath) match {
+              case Some(dListeners) => 
+                dListeners.foreach {
+                  l =>
+                    // println(s"Running event")
+                    l(fileAbsoluteFile)
+                }
+              case None => 
+            }
+            /*directoryChangeListeners.get(directoryFile) match {
+              case Some(listeners) =>
+                listeners.foreach {
+                  l =>
+                    // println(s"Running event")
+                    l(filePath)
+                }
+              case None =>
+            }*/
+
+          // File Modify
+          //----------------
           case be: WatchEvent[_] if (be.kind() == StandardWatchEventKinds.ENTRY_MODIFY) =>
 
-            var e = be.asInstanceOf[ WatchEvent[Path]]
+            var e = be.asInstanceOf[WatchEvent[Path]]
 
             // Get Path of directory
             var directoryFile = this.baseDirectories.get(key).get
-            
+
             // Get Path of file
             var filePath = directoryFile.toPath().resolve(e.context()).toAbsolutePath().toFile().getAbsolutePath
             //var filePath = directoryFile.toPath().resolve(e.context()).toAbsolutePath().toFile().getAbsolutePath
-          
+
             //var filePath = 
             //println(s"///////////// Got Modify event for "+filePath+ "// "+e.context().toAbsolutePath().toFile().getAbsolutePath+"//"+directoryFile.toPath())
-            
+
             // Get and run listeners
             changeListeners.get(filePath) match {
               case Some(listeners) =>
                 listeners.foreach {
-                  l => 
-                   // println(s"Running event")
+                  l =>
+                    // println(s"Running event")
                     l()
                 }
               case None =>
             }
-            
-          case e => 
-            
+
+          case e =>
+
             println(s"///////////// Got Event ")
         }
 
