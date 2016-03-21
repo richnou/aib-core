@@ -3,3 +3,5 @@ target
 .project
 .settings
 .cache
+*.cache-main
+.cache-tests
